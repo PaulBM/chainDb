@@ -1,5 +1,10 @@
 package com.example.dbtest;
 
+/**
+ * 
+ * @author PaulBM
+ * 2013
+ */
 public class DbAchieved {
 
   /**
@@ -17,16 +22,22 @@ public class DbAchieved {
    */
   private long gameId;
   
+  /**
+   * flag to signify that the achieved achievement has been synced with Google Play Store 0=no, 1=yes
+   */
+  private int googled;
+  
   public DbAchieved()
   {
     
   }
   
-  public DbAchieved(long achievementId, long playerId, long gameId)
+  public DbAchieved(long achievementId, long playerId, long gameId, int googled)
   {
     setAchievementId(achievementId);
     setPlayerId(playerId);
     setGameId(gameId);
+    setGoogled(googled);
   }
   //getters
   
@@ -57,6 +68,10 @@ public class DbAchieved {
     return this.gameId;
   }
    
+  public int getGoogled()
+  {
+	  return this.googled;
+  }
   
   //setters
   
@@ -85,5 +100,14 @@ public class DbAchieved {
   public void setGameId(long id)
   {
     this.gameId=id;
+  }
+  
+  /**
+   * set the Google synced flag 1=yes, 0=no
+   * @param flag
+   */
+  public void setGoogled(int flag)
+  {
+	this.googled=flag;  
   }
 }
