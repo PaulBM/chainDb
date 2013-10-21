@@ -3,7 +3,7 @@ package com.example.dbtest;
 /**
  * 
  * @author PaulBM
- * 2013
+ * @version 0.1
  */
 public class DbAchieved {
 

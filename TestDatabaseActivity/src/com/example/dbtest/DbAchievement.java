@@ -4,7 +4,7 @@ package com.example.dbtest;
  * Class for the Achievements database table
  * 
  * @author PaulBM
- * 2013
+ * @version 0.1
  */
 public class DbAchievement {
 

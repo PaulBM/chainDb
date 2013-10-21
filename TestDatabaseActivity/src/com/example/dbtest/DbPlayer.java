@@ -1,5 +1,10 @@
 package com.example.dbtest;
 
+/**
+ * 
+ * @author PaulBM
+ * @version 0.1
+ */
 public class DbPlayer {
   /**
    * player id primary key
