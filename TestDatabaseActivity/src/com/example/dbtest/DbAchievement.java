@@ -3,8 +3,8 @@ package com.example.dbtest;
 /**
  * Class for the Achievements database table
  * 
- * @author paulbm
- * 
+ * @author PaulBM
+ * 2013
  */
 public class DbAchievement {
 

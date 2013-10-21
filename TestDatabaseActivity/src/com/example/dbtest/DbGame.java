@@ -2,6 +2,11 @@ package com.example.dbtest;
 
 import java.util.Date;
 
+/**
+ * 
+ * @author PaulBM
+ * @version 0.1
+ */
 public class DbGame {
   /**
    * game id primary key
