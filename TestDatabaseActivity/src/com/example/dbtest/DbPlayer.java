@@ -3,7 +3,7 @@ package com.example.dbtest;
 /**
  * 
  * @author PaulBM
- * @version 0.1
+ * @version 0.1.1
  */
 public class DbPlayer {
   /**
