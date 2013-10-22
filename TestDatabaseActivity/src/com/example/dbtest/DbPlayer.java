@@ -3,12 +3,8 @@ package com.example.dbtest;
 /**
  * 
  * @author PaulBM
-<<<<<<< HEAD
  * @version 0.1.1
-=======
- * @version 0.1
  * changed laptop
->>>>>>> branch 'master' of https://github.com/PaulBM/chainDb.git
  */
 public class DbPlayer {
   /**
