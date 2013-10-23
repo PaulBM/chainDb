@@ -27,18 +27,26 @@ public class DbAchieved {
    */
   private int googled;
   
+  /**
+   * date/time that the achievement was achieved
+   */
+  private String datetimeAch;
+  
   public DbAchieved()
   {
     
   }
   
-  public DbAchieved(long achievementId, long playerId, long gameId, int googled)
+  public DbAchieved(long achievementId, long playerId, long gameId, int googled, String datetime)
   {
     setAchievementId(achievementId);
     setPlayerId(playerId);
     setGameId(gameId);
     setGoogled(googled);
+    setDatetime(datetime);
   }
+  
+  
   //getters
   
   /**
@@ -71,6 +79,11 @@ public class DbAchieved {
   public int getGoogled()
   {
 	  return this.googled;
+  }
+  
+  public String getDatetime()
+  {
+	  return this.datetimeAch;
   }
   
   //setters
@@ -109,5 +122,10 @@ public class DbAchieved {
   public void setGoogled(int flag)
   {
 	this.googled=flag;  
+  }
+  
+  public void setDatetime(String datetime)
+  {
+	this.datetimeAch=datetime;  
   }
 }

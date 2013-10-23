@@ -53,6 +53,8 @@ public class ChainDbHelper extends SQLiteOpenHelper {
     private static final String ACHIEVED_ACHIEVEMENT ="achievement";
     private static final String ACHIEVED_PLAYER ="player";
     private static final String ACHIEVED_GAME ="game";
+    private static final String ACHIEVED_GOOGLED ="googled";
+    private static final String ACHIEVED_DATETIME ="datetimeAch";
     
     // Table Create Statements
     // Achievements table create statement
@@ -85,6 +87,7 @@ public class ChainDbHelper extends SQLiteOpenHelper {
     + ACHIEVED_ACHIEVEMENT + " INTEGER NOT NULL PRIMARY KEY,"
     + ACHIEVED_PLAYER + " INTEGER NOT NULL PRIMARY KEY,"
     + ACHIEVED_GAME + " INTEGER NOT NULL PRIMARY KEY,"
+    + ACHIEVED_GOOGLED + " INTEGER"
     + ")";    
     
     
@@ -114,11 +117,14 @@ public class ChainDbHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
     
+    //****************** Achievements ************************************
     
-    /*
-     * Creating an achievement
+    /**
+     * Insert an achievement into database
+     * @param achievement
+     * @return id of new achievement record or error code from SQLite
      */
-    public long createAchievement(DbAchievement achievement) {
+    public long insertAchievement(DbAchievement achievement) {
         SQLiteDatabase db = this.getWritableDatabase();
      
         ContentValues values = new ContentValues();
@@ -130,8 +136,10 @@ public class ChainDbHelper extends SQLiteOpenHelper {
         return id;
     }
     
-    /*
-     * get an achievement
+    /**
+     * Read an achievement from the database
+     * @param id
+     * @return DbAchievement object
      */
     public DbAchievement getAchievement(long id) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -148,18 +156,47 @@ public class ChainDbHelper extends SQLiteOpenHelper {
         DbAchievement obj = new DbAchievement(c.getInt(c.getColumnIndex(ACH_ID)),
         		c.getString(c.getColumnIndex(ACH_NAME)), 
         		c.getString(c.getColumnIndex(ACH_DESC)));
-        /*
-        td.setId(c.getInt(c.getColumnIndex(KEY_ID)));
-        td.setNote((c.getString(c.getColumnIndex(KEY_TODO))));
-        td.setCreatedAt(c.getString(c.getColumnIndex(KEY_CREATED_AT)));
-     */
+
         return obj;
     }    
-    
-    /*
-     * Creating a player
+
+    /**
+     * Get all achievements    
+     * @return List of DbAchievement objects
      */
-    public long createPlayer(DbPlayer player) {
+    public List<DbAchievement> getAllAchievements() {
+        List<DbAchievement> achs = new ArrayList<DbAchievement>();
+        String selectQuery = "SELECT  * FROM " + TABLE_ACHIEVEMENTS ;
+     
+//        Log.e(LOG, selectQuery);
+     
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+     
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                DbAchievement ach = new DbAchievement();
+                ach.setId(c.getLong(c.getColumnIndex(ACH_ID)));
+                ach.setName(c.getString(c.getColumnIndex(ACH_NAME)));
+                ach.setAchDesc(c.getString(c.getColumnIndex(ACH_DESC)));
+     
+                // adding to achieved list
+                achs.add(ach);
+            } while (c.moveToNext());
+        }
+     
+        return achs;
+    }    
+    
+    //****************** Players **********************************
+    
+    /**
+     * Insert player into database
+     * @param player
+     * @return id of the new player
+     */
+    public long insertPlayer(DbPlayer player) {
         SQLiteDatabase db = this.getWritableDatabase();
      
         ContentValues values = new ContentValues();
@@ -170,8 +207,10 @@ public class ChainDbHelper extends SQLiteOpenHelper {
         return id;
     }  
     
-    /*
-     * get a player
+    /**
+     * Read player from database
+     * @param id
+     * @return a player object
      */
     public DbPlayer getPlayer(long id) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -187,16 +226,14 @@ public class ChainDbHelper extends SQLiteOpenHelper {
      
         DbPlayer obj = new DbPlayer(c.getInt(c.getColumnIndex(PLAYER_ID)),
         		c.getString(c.getColumnIndex(PLAYER_NAME)));
-        /*
-        td.setId(c.getInt(c.getColumnIndex(KEY_ID)));
-        td.setNote((c.getString(c.getColumnIndex(KEY_TODO))));
-        td.setCreatedAt(c.getString(c.getColumnIndex(KEY_CREATED_AT)));
-     */
+
         return obj;
     }   
     
-    /*
-     * Updating a player
+    /**
+     * Update a player in the database 
+     * @param player
+     * @return update return code
      */
     public int updatePlayer(DbPlayer player) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -211,14 +248,14 @@ public class ChainDbHelper extends SQLiteOpenHelper {
     
     
     
-    
+// ***************** Games **********************************    
     
     /**
-     * Create a new game database entry
+     * Insert a new game database entry
      * @param game
      * @return id of new game
      */
-    public long createGame(DbGame game) {
+    public long insertGame(DbGame game) {
         SQLiteDatabase db = this.getWritableDatabase();
      
         ContentValues values = new ContentValues();
@@ -261,26 +298,26 @@ public class ChainDbHelper extends SQLiteOpenHelper {
         		c.getInt(c.getColumnIndex(GAME_LEVEL)),
         		c.getLong(c.getColumnIndex(GAME_PLAYER))        		
         		);
-        /*
-        td.setId(c.getInt(c.getColumnIndex(KEY_ID)));
-        td.setNote((c.getString(c.getColumnIndex(KEY_TODO))));
-        td.setCreatedAt(c.getString(c.getColumnIndex(KEY_CREATED_AT)));
-     */
+
         return obj;
     }     
     
+    // *********** Achieved achievements *********************
+    
     /**
-     * Create an achieved achievement
+     * Insert an achieved achievement into database
      * @param achieved
      * @return array of the primary keys
      */
-    public long createAchieved(DbAchieved achieved) {
+    public long insertAchieved(DbAchieved achieved) {
         SQLiteDatabase db = this.getWritableDatabase();
      
         ContentValues values = new ContentValues();
         values.put(ACHIEVED_GAME, achieved.getGameId());
         values.put(ACHIEVED_ACHIEVEMENT, achieved.getAchievementId());
         values.put(ACHIEVED_PLAYER, achieved.getPlayerId());
+        values.put(ACHIEVED_GOOGLED, achieved.getGoogled());
+        values.put(ACHIEVED_DATETIME, achieved.getDatetime());
         
         // insert row
         long id = db.insert(TABLE_ACHIEVED, null, values);
@@ -289,7 +326,7 @@ public class ChainDbHelper extends SQLiteOpenHelper {
     
     /**
      * Get all achieved by player id    
-     * @return
+     * @return List of DbAchieved objects
      */
     public List<DbAchieved> getPlayerAchieved(long id) {
         List<DbAchieved> achieveds = new ArrayList<DbAchieved>();
@@ -307,6 +344,8 @@ public class ChainDbHelper extends SQLiteOpenHelper {
                 ached.setPlayerId(id);
                 ached.setGameId((c.getLong(c.getColumnIndex(ACHIEVED_GAME))));
                 ached.setAchievementId(c.getLong(c.getColumnIndex(ACHIEVED_ACHIEVEMENT)));
+                ached.setGoogled(c.getInt(c.getColumnIndex(ACHIEVED_GOOGLED)));
+                ached.setDatetime(c.getString(c.getColumnIndex(ACHIEVED_DATETIME)));
      
                 // adding to achieved list
                 achieveds.add(ached);
