@@ -5,7 +5,7 @@ package com.example.dbtest;
  * @author PaulBM
  * @version 0.1
  */
-public class DbAchieved {
+public class DbUnlocked {
 
   /**
    * the id of the achieved achievement
@@ -32,12 +32,12 @@ public class DbAchieved {
    */
   private String datetimeAch;
   
-  public DbAchieved()
+  public DbUnlocked()
   {
     
   }
   
-  public DbAchieved(long achievementId, long playerId, long gameId, int googled, String datetime)
+  public DbUnlocked(long achievementId, long playerId, long gameId, int googled, String datetime)
   {
     setAchievementId(achievementId);
     setPlayerId(playerId);

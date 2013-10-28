@@ -28,7 +28,7 @@ public class ChainDbHelper extends SQLiteOpenHelper {
     private static final String TABLE_ACHIEVEMENTS = "achievements";
     private static final String TABLE_GAMES = "games";
     private static final String TABLE_PLAYERS = "players";
-    private static final String TABLE_ACHIEVED = "achieved";
+    private static final String TABLE_UNLOCKED = "achieved";
 
     // Achievements Table - column names
     private static final String ACH_ID = "ach_id";
@@ -50,11 +50,11 @@ public class ChainDbHelper extends SQLiteOpenHelper {
     private static final String PLAYER_NAME ="player_name";
     
     //Achieved Table - column names
-    private static final String ACHIEVED_ACHIEVEMENT ="achievement";
-    private static final String ACHIEVED_PLAYER ="player";
-    private static final String ACHIEVED_GAME ="game";
-    private static final String ACHIEVED_GOOGLED ="googled";
-    private static final String ACHIEVED_DATETIME ="datetimeAch";
+    private static final String UNLOCKED_ACHIEVEMENT ="achievement";
+    private static final String UNLOCKED_PLAYER ="player";
+    private static final String UNLOCKED_GAME ="game";
+    private static final String UNLOCKED_GOOGLED ="googled";
+    private static final String UNLOCKED_DATETIME ="datetimeAch";
     
     // Table Create Statements
     // Achievements table create statement
@@ -83,11 +83,11 @@ public class ChainDbHelper extends SQLiteOpenHelper {
     + ")";    
     		
     //Achieved table create statement
-    private static final String CREATE_TABLE_ACHIEVED = "CREATE TABLE " + TABLE_ACHIEVED + "("
-    + ACHIEVED_ACHIEVEMENT + " INTEGER NOT NULL PRIMARY KEY,"
-    + ACHIEVED_PLAYER + " INTEGER NOT NULL PRIMARY KEY,"
-    + ACHIEVED_GAME + " INTEGER NOT NULL PRIMARY KEY,"
-    + ACHIEVED_GOOGLED + " INTEGER"
+    private static final String CREATE_TABLE_UNLOCKED = "CREATE TABLE " + TABLE_UNLOCKED + "("
+    + UNLOCKED_ACHIEVEMENT + " INTEGER NOT NULL PRIMARY KEY,"
+    + UNLOCKED_PLAYER + " INTEGER NOT NULL PRIMARY KEY,"
+    + UNLOCKED_GAME + " INTEGER NOT NULL PRIMARY KEY,"
+    + UNLOCKED_GOOGLED + " INTEGER"
     + ")";    
     
     
@@ -102,7 +102,7 @@ public class ChainDbHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_ACHIEVEMENTS);
         db.execSQL(CREATE_TABLE_GAMES);
         db.execSQL(CREATE_TABLE_PLAYERS);
-        db.execSQL(CREATE_TABLE_ACHIEVED);
+        db.execSQL(CREATE_TABLE_UNLOCKED);
     }    
 
     @Override
@@ -111,7 +111,7 @@ public class ChainDbHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_ACHIEVEMENTS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_GAMES);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PLAYERS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_ACHIEVED);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_UNLOCKED);
  
         // create new tables
         onCreate(db);
@@ -309,18 +309,18 @@ public class ChainDbHelper extends SQLiteOpenHelper {
      * @param achieved
      * @return array of the primary keys
      */
-    public long insertAchieved(DbAchieved achieved) {
+    public long insertAchieved(DbUnlocked achieved) {
         SQLiteDatabase db = this.getWritableDatabase();
      
         ContentValues values = new ContentValues();
-        values.put(ACHIEVED_GAME, achieved.getGameId());
-        values.put(ACHIEVED_ACHIEVEMENT, achieved.getAchievementId());
-        values.put(ACHIEVED_PLAYER, achieved.getPlayerId());
-        values.put(ACHIEVED_GOOGLED, achieved.getGoogled());
-        values.put(ACHIEVED_DATETIME, achieved.getDatetime());
+        values.put(UNLOCKED_GAME, achieved.getGameId());
+        values.put(UNLOCKED_ACHIEVEMENT, achieved.getAchievementId());
+        values.put(UNLOCKED_PLAYER, achieved.getPlayerId());
+        values.put(UNLOCKED_GOOGLED, achieved.getGoogled());
+        values.put(UNLOCKED_DATETIME, achieved.getDatetime());
         
         // insert row
-        long id = db.insert(TABLE_ACHIEVED, null, values);
+        long id = db.insert(TABLE_UNLOCKED, null, values);
         return id;
     }     
     
@@ -328,9 +328,9 @@ public class ChainDbHelper extends SQLiteOpenHelper {
      * Get all achieved by player id    
      * @return List of DbAchieved objects
      */
-    public List<DbAchieved> getPlayerAchieved(long id) {
-        List<DbAchieved> achieveds = new ArrayList<DbAchieved>();
-        String selectQuery = "SELECT  * FROM " + TABLE_ACHIEVED + " WHERE player_id=" + id;
+    public List<DbUnlocked> getPlayerAchieved(long id) {
+        List<DbUnlocked> achieveds = new ArrayList<DbUnlocked>();
+        String selectQuery = "SELECT  * FROM " + TABLE_UNLOCKED + " WHERE player_id=" + id;
      
 //        Log.e(LOG, selectQuery);
      
@@ -340,12 +340,12 @@ public class ChainDbHelper extends SQLiteOpenHelper {
         // looping through all rows and adding to list
         if (c.moveToFirst()) {
             do {
-                DbAchieved ached = new DbAchieved();
+                DbUnlocked ached = new DbUnlocked();
                 ached.setPlayerId(id);
-                ached.setGameId((c.getLong(c.getColumnIndex(ACHIEVED_GAME))));
-                ached.setAchievementId(c.getLong(c.getColumnIndex(ACHIEVED_ACHIEVEMENT)));
-                ached.setGoogled(c.getInt(c.getColumnIndex(ACHIEVED_GOOGLED)));
-                ached.setDatetime(c.getString(c.getColumnIndex(ACHIEVED_DATETIME)));
+                ached.setGameId((c.getLong(c.getColumnIndex(UNLOCKED_GAME))));
+                ached.setAchievementId(c.getLong(c.getColumnIndex(UNLOCKED_ACHIEVEMENT)));
+                ached.setGoogled(c.getInt(c.getColumnIndex(UNLOCKED_GOOGLED)));
+                ached.setDatetime(c.getString(c.getColumnIndex(UNLOCKED_DATETIME)));
      
                 // adding to achieved list
                 achieveds.add(ached);
