@@ -28,7 +28,7 @@ public class ChainDbHelper extends SQLiteOpenHelper {
     private static final String TABLE_ACHIEVEMENTS = "achievements";
     private static final String TABLE_GAMES = "games";
     private static final String TABLE_PLAYERS = "players";
-    private static final String TABLE_UNLOCKED = "achieved";
+    private static final String TABLE_UNLOCKED = "unlocked";
 
     // Achievements Table - column names
     private static final String ACH_ID = "ach_id";
