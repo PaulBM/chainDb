@@ -302,14 +302,14 @@ public class ChainDbHelper extends SQLiteOpenHelper {
         return obj;
     }     
     
-    // *********** Achieved achievements *********************
+    // *********** Unlocked achievements *********************
     
     /**
-     * Insert an achieved achievement into database
+     * Insert an unlocked achievement into database
      * @param achieved
      * @return array of the primary keys
      */
-    public long insertAchieved(DbUnlocked achieved) {
+    public long insertUnlocked(DbUnlocked achieved) {
         SQLiteDatabase db = this.getWritableDatabase();
      
         ContentValues values = new ContentValues();
@@ -325,10 +325,10 @@ public class ChainDbHelper extends SQLiteOpenHelper {
     }     
     
     /**
-     * Get all achieved by player id    
-     * @return List of DbAchieved objects
+     * Get all unlocked by player id    
+     * @return List of DbUnlocked objects
      */
-    public List<DbUnlocked> getPlayerAchieved(long id) {
+    public List<DbUnlocked> getPlayerUnlocked(long id) {
         List<DbUnlocked> achieveds = new ArrayList<DbUnlocked>();
         String selectQuery = "SELECT  * FROM " + TABLE_UNLOCKED + " WHERE player_id=" + id;
      
@@ -340,18 +340,18 @@ public class ChainDbHelper extends SQLiteOpenHelper {
         // looping through all rows and adding to list
         if (c.moveToFirst()) {
             do {
-                DbUnlocked ached = new DbUnlocked();
-                ached.setPlayerId(id);
-                ached.setGameId((c.getLong(c.getColumnIndex(UNLOCKED_GAME))));
-                ached.setAchievementId(c.getLong(c.getColumnIndex(UNLOCKED_ACHIEVEMENT)));
-                ached.setGoogled(c.getInt(c.getColumnIndex(UNLOCKED_GOOGLED)));
-                ached.setDatetime(c.getString(c.getColumnIndex(UNLOCKED_DATETIME)));
+                DbUnlocked unlock = new DbUnlocked();
+                unlock.setPlayerId(id);
+                unlock.setGameId((c.getLong(c.getColumnIndex(UNLOCKED_GAME))));
+                unlock.setAchievementId(c.getLong(c.getColumnIndex(UNLOCKED_ACHIEVEMENT)));
+                unlock.setGoogled(c.getInt(c.getColumnIndex(UNLOCKED_GOOGLED)));
+                unlock.setDatetime(c.getString(c.getColumnIndex(UNLOCKED_DATETIME)));
      
-                // adding to achieved list
-                achieveds.add(ached);
+                // adding to unlocked list
+                unlockeds.add(unlock);
             } while (c.moveToNext());
         }
      
-        return achieveds;
+        return unlockeds;
     }
 }
