@@ -20,23 +20,30 @@ public class DbAchievement {
    * achievement description
    */
   private String ach_description;
+  
+  /**
+   * achievemt difficulty level : 0 any diffculty, 4 Easy, 5 Medium, 6 Hard
+   */
+  private int ach_difficulty;
 
   public DbAchievement() {
 
   }
 
-  public DbAchievement(String name, String description) {
+  public DbAchievement(String name, String description, int difficulty) {
     if (name != null && description != null) {
       setName(name);
       setAchDesc(description);
+      setAchDiff(difficulty);
     }
   }
 
-  public DbAchievement(long id, String name, String description) {
+  public DbAchievement(long id, String name, String description, int difficulty) {
     if (id > 0 && name != null && description != null) {
       setId(id);
       setName(name);
       setAchDesc(description);
+      setAchDiff(difficulty);
     }
   }
 
@@ -69,6 +76,16 @@ public class DbAchievement {
     return ach_description;
   }
   
+  /**
+   * Returns the achievement difficulty
+   * 
+   * @return int
+   */
+  public int getAchDiff() {
+    return ach_difficulty;
+  }
+  
+  
   //setters
 
   /**
@@ -96,9 +113,15 @@ public class DbAchievement {
    * 
    * @param desc
    */
-  public void setAchDesc(String desc) {
+  public void setAchDesc(String desc)
+  {
     if (desc != null) {
       this.ach_description = desc;
     }
+  }
+  
+  public void setAchDiff(int diff) 
+  {
+	this.ach_difficulty = diff;
   }
 }

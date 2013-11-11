@@ -1,7 +1,5 @@
 package com.example.dbtest;
 
-import java.util.Date;
-
 /**
  * 
  * @author PaulBM

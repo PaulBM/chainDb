@@ -1,3 +1,0 @@
-Easy Four:Get 4 tiles to explode together on Easy level
-Medium Four:Get 4 tiles to explode together on Medium level
-Hard Four:Get 4 tiles to explode together on Hard level

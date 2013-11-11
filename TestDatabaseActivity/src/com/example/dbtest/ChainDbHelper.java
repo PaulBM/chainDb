@@ -34,6 +34,8 @@ public class ChainDbHelper extends SQLiteOpenHelper {
     private static final String ACH_ID = "ach_id";
     private static final String ACH_NAME = "ach_name";
     private static final String ACH_DESC = "ach_description";
+    private static final String ACH_DIFF = "ach_difficulty";
+    
      
     //Games Table - column names
     private static final String GAME_ID ="game_id";
@@ -61,7 +63,8 @@ public class ChainDbHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_ACHIEVEMENTS = "CREATE TABLE " + TABLE_ACHIEVEMENTS + "(" 
     + ACH_ID + " INTEGER PRIMARY KEY,"
     + ACH_NAME + " TEXT,"
-    + ACH_DESC + " TEXT"
+    + ACH_DESC + " TEXT,"
+    + ACH_DIFF + " INTEGER"
     + ")";    
     
     // Games table create statement
@@ -130,6 +133,7 @@ public class ChainDbHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(ACH_NAME, achievement.getName());
         values.put(ACH_DESC, achievement.getAchDesc());
+        values.put(ACH_DIFF, achievement.getAchDiff());
      
         // insert row
         long id = db.insert(TABLE_ACHIEVEMENTS, null, values);
@@ -155,7 +159,8 @@ public class ChainDbHelper extends SQLiteOpenHelper {
      
         DbAchievement obj = new DbAchievement(c.getInt(c.getColumnIndex(ACH_ID)),
         		c.getString(c.getColumnIndex(ACH_NAME)), 
-        		c.getString(c.getColumnIndex(ACH_DESC)));
+        		c.getString(c.getColumnIndex(ACH_DESC)),
+        		c.getInt(c.getColumnIndex(ACH_DIFF)));
 
         return obj;
     }    
@@ -180,6 +185,7 @@ public class ChainDbHelper extends SQLiteOpenHelper {
                 ach.setId(c.getLong(c.getColumnIndex(ACH_ID)));
                 ach.setName(c.getString(c.getColumnIndex(ACH_NAME)));
                 ach.setAchDesc(c.getString(c.getColumnIndex(ACH_DESC)));
+                ach.setAchDiff(c.getInt(c.getColumnIndex(ACH_DIFF)));
      
                 // adding to achieved list
                 achs.add(ach);
@@ -329,7 +335,7 @@ public class ChainDbHelper extends SQLiteOpenHelper {
      * @return List of DbUnlocked objects
      */
     public List<DbUnlocked> getPlayerUnlocked(long id) {
-        List<DbUnlocked> achieveds = new ArrayList<DbUnlocked>();
+        List<DbUnlocked> unlockeds = new ArrayList<DbUnlocked>();
         String selectQuery = "SELECT  * FROM " + TABLE_UNLOCKED + " WHERE player_id=" + id;
      
 //        Log.e(LOG, selectQuery);
