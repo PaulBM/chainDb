@@ -109,7 +109,7 @@ public class MainActivity extends Activity {
 					db.storeAchievement(objAchs.get(achsCount));
 					
 					tv = new TextView(this);
-					tv.setText(objAchs.get(achsCount).getName());
+					tv.setText(id + " " + objAchs.get(achsCount).getName());
 				    tv.setId((int) id);
 				    tv.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 					Log.d("Info","Ready to add new TextView");
