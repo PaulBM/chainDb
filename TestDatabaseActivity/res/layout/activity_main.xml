@@ -20,6 +20,7 @@
         android:id="@+id/tvSecond"
         android:layout_width="288dp"
         android:layout_height="wrap_content"
+        android:layout_weight="0.02"
         android:text="@string/defaultTextView"
         android:textColor="#0000ff" />
 

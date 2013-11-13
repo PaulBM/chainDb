@@ -9,6 +9,8 @@ import android.app.Activity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
@@ -54,7 +56,8 @@ public class MainActivity extends Activity {
 		tv.setText(db.getDatabaseName());
 
 		try {
-			err = readAchievements();
+			err = readAchievements((LinearLayout) findViewById(R.id.layoutAchs));
+
 			if (err) {
 				Log.d("Error!", "Error reading achievements csv file.");
 			}
@@ -73,12 +76,14 @@ public class MainActivity extends Activity {
 		return true;
 	}
 
-	public boolean readAchievements() throws IOException {
+	public boolean readAchievements(LinearLayout layout) throws IOException {
 		boolean err = false;
 		List<String> achs;
 		String[] ach;
 		List<DbAchievement> objAchs = new ArrayList<DbAchievement>();
 		int achsCount = 0;
+		TextView tv = new TextView(this);
+		long id = 0;
 
 		achs = Utils.readLinesFromFile(getAssets().open("achievements.csv"));
 
@@ -96,11 +101,21 @@ public class MainActivity extends Activity {
 					 * }
 					 */
 
-					objAchs.add(new DbAchievement(Long.parseLong(ach[0]),ach[1], ach[2], Integer.parseInt(ach[3])));
+					id = Long.parseLong(ach[0]);
+					objAchs.add(new DbAchievement( id, ach[1], ach[2], Integer.parseInt(ach[3])));
 					Log.d("Info", objAchs.get(achsCount).toString());
 					
 					//check to see if the achievement exists in the local db
 					db.storeAchievement(objAchs.get(achsCount));
+					
+					tv = new TextView(this);
+					tv.setText(objAchs.get(achsCount).getName());
+				    tv.setId((int) id);
+				    tv.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+					Log.d("Info","Ready to add new TextView");
+					layout.addView(tv);
+		
+					Log.d("Info","TextView added " + id);
 					
 					//keep a count of list size
 					achsCount++;
