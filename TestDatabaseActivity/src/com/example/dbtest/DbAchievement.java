@@ -46,7 +46,14 @@ public class DbAchievement {
       setAchDiff(difficulty);
     }
   }
+  
+  public String toString()
+  {
+	 return "Achievement : ID='" + this.ach_id + "' Name='" + this.ach_name + "' Desc='" + this.ach_description + "' Diff='" + this.ach_difficulty + "'";
+  }
 
+  
+  
   //getters
   
   /**

@@ -19,10 +19,19 @@
     <TextView
         android:id="@+id/tvSecond"
         android:layout_width="288dp"
-        android:layout_height="0dip"
-        android:layout_weight="0.01"
-        android:paddingTop="10dp"
+        android:layout_height="wrap_content"
         android:text="@string/defaultTextView"
         android:textColor="#0000ff" />
+
+    <LinearLayout
+        android:id="@+id/layoutAchs"
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="0.31"
+        android:background="#aaaaaa"
+        android:orientation="vertical"
+        android:paddingTop="10dp" >
+
+    </LinearLayout>
 
 </LinearLayout>

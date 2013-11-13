@@ -96,11 +96,12 @@ public class ChainDbHelper extends SQLiteOpenHelper {
     
     public ChainDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+
     }
  
     @Override
     public void onCreate(SQLiteDatabase db) {
- 
+    	
         // creating required tables
         db.execSQL(CREATE_TABLE_ACHIEVEMENTS);
         db.execSQL(CREATE_TABLE_GAMES);
@@ -123,6 +124,24 @@ public class ChainDbHelper extends SQLiteOpenHelper {
     //****************** Achievements ************************************
     
     /**
+     * Check if Achievement is in db, insert if not or update.
+     * @param ach
+     */
+    public void storeAchievement(DbAchievement ach)
+    {
+    	DbAchievement tempAch = new DbAchievement();
+    	
+    	tempAch = getAchievement(ach.getId());
+    	
+    	if (tempAch.getId() > 0 ) {
+    		updateAchievement(ach);
+    	}
+    	else {
+    		insertAchievement(ach);
+    	}
+    }
+    
+    /**
      * Insert an achievement into database
      * @param achievement
      * @return id of new achievement record or error code from SQLite
@@ -131,6 +150,7 @@ public class ChainDbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
      
         ContentValues values = new ContentValues();
+        values.put(ACH_ID, achievement.getId());
         values.put(ACH_NAME, achievement.getName());
         values.put(ACH_DESC, achievement.getAchDesc());
         values.put(ACH_DIFF, achievement.getAchDiff());
@@ -138,6 +158,25 @@ public class ChainDbHelper extends SQLiteOpenHelper {
         // insert row
         long id = db.insert(TABLE_ACHIEVEMENTS, null, values);
         return id;
+    }
+
+    /**
+     * Update an achievement into database
+     * @param achievement
+     * @return rows number of affected rows or error code from SQLite
+     */
+    public int updateAchievement(DbAchievement achievement) {
+    	int rows = 0;
+        SQLiteDatabase db = this.getWritableDatabase();
+     
+        ContentValues values = new ContentValues();
+        values.put(ACH_NAME, achievement.getName());
+        values.put(ACH_DESC, achievement.getAchDesc());
+        values.put(ACH_DIFF, achievement.getAchDiff());
+     
+        // update row - table, values, where clause, where args
+        rows = db.update(TABLE_ACHIEVEMENTS, values, ACH_ID + "= ?",  new String[] { String.valueOf(achievement.getId()) } );
+        return rows;
     }
     
     /**
