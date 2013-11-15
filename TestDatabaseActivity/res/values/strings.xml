@@ -7,5 +7,10 @@
     <string name="add_button">Add New</string>
     <string name="delete_button">Delete First</string>
     <string name="defaultTextView">a textview</string>
+    <string name="easyRadio">Easy Level</string>
+    <string name="mediumRadio">Medium Level</string>
+    <string name="hardRadio">Hard Level</string>
+    <string name="addGameButton">Add a Game</string>
+    <string name="choosePlayer">Choose a Player</string>
 
 </resources>
