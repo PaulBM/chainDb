@@ -12,5 +12,6 @@
     <string name="hardRadio">Hard Level</string>
     <string name="addGameButton">Add a Game</string>
     <string name="choosePlayer">Choose a Player</string>
+    <string name="versionNumber">1.1</string>
 
 </resources>

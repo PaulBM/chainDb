@@ -6,6 +6,7 @@ import java.util.List;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
@@ -29,6 +30,7 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		boolean err;
 		TextView tv;
+		String versionName = null;
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
@@ -54,6 +56,16 @@ public class MainActivity extends Activity {
 
 		tv = (TextView) findViewById(R.id.tvDbName);
 		tv.setText(db.getDatabaseName());
+		
+
+		try {
+			versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+		} catch (NameNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		tv = (TextView) findViewById(R.id.tvVersionName);
+		tv.setText(versionName);
 
 		try {
 			err = readAchievements((LinearLayout) findViewById(R.id.layoutAchs));

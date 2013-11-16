@@ -10,11 +10,26 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
 
-    <TextView
-        android:id="@+id/tvDbName"
-        android:layout_width="288dp"
-        android:layout_height="wrap_content"
-        android:text="@string/defaultTextView" />
+    <LinearLayout
+        android:id="@+id/layoutInfo1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/tvDbName"
+            android:layout_width="186dp"
+            android:layout_height="wrap_content"
+            android:text="@string/defaultTextView" />
+
+        <TextView
+            android:id="@+id/tvVersionName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:gravity="right"
+            android:text="@string/defaultTextView" />
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/tvSecond"
@@ -32,7 +47,6 @@
         android:background="#aaaaaa"
         android:orientation="vertical"
         android:paddingTop="10dp" >
-
     </LinearLayout>
 
 </LinearLayout>
