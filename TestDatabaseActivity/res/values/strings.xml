@@ -13,5 +13,10 @@
     <string name="addGameButton">Add a Game</string>
     <string name="choosePlayer">Choose a Player</string>
     <string name="versionNumber">1.1</string>
+    <string name="title_activity_add_game">AddGameActivity</string>
+    <string name="gotoGameText">Games</string>
+    <string name="playerButtonText">Players</string>
+    <string name="title_activity_player">PlayerActivity</string>
+    <string name="achievements_title">Achievements</string>
 
 </resources>

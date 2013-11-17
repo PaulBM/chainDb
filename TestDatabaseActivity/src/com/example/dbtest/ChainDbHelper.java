@@ -20,7 +20,7 @@ import android.util.Log;
 public class ChainDbHelper extends SQLiteOpenHelper {
 
 	// Database Version
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 2;
 
 	// Database Name
 	private static final String DATABASE_NAME = "chain.db";
@@ -36,6 +36,7 @@ public class ChainDbHelper extends SQLiteOpenHelper {
 	private static final String ACH_NAME = "ach_name";
 	private static final String ACH_DESC = "ach_description";
 	private static final String ACH_DIFF = "ach_difficulty";
+	private static final String ACH_HIDDEN = "ach_hidden";
 
 	// Games Table - column names
 	private static final String GAME_ID = "game_id";
@@ -62,15 +63,16 @@ public class ChainDbHelper extends SQLiteOpenHelper {
 	// Achievements table create statement
 	private static final String CREATE_TABLE_ACHIEVEMENTS = "CREATE TABLE "
 			+ TABLE_ACHIEVEMENTS + "(" + ACH_ID + " INTEGER PRIMARY KEY,"
-			+ ACH_NAME + " TEXT," + ACH_DESC + " TEXT," + ACH_DIFF + " INTEGER"
+			+ ACH_NAME + " TEXT," + ACH_DESC + " TEXT," + ACH_DIFF + " INTEGER,"
+			+ ACH_HIDDEN + " INTEGER"
 			+ ")";
 
 	// Games table create statement
 	private static final String CREATE_TABLE_GAMES = "CREATE TABLE "
 			+ TABLE_GAMES + "(" + GAME_ID + " INTEGER PRIMARY KEY,"
 			+ GAME_START + " DATETIME," + GAME_END + " DATETIME," + GAME_DUR
-			+ " LONGINT," + GAME_SCORE + " LONGINT," + GAME_DIFF + " INT,"
-			+ GAME_LEVEL + " INT," + GAME_PLAYER + " INT" + ")";
+			+ " LONGINT," + GAME_SCORE + " LONGINT," + GAME_DIFF + " INTEGER,"
+			+ GAME_LEVEL + " INTEGER," + GAME_PLAYER + " INTEGER" + ")";
 
 	// Players table create statement
 	private static final String CREATE_TABLE_PLAYERS = "CREATE TABLE "
@@ -149,6 +151,7 @@ public class ChainDbHelper extends SQLiteOpenHelper {
 		values.put(ACH_NAME, achievement.getName());
 		values.put(ACH_DESC, achievement.getAchDesc());
 		values.put(ACH_DIFF, achievement.getAchDiff());
+		values.put(ACH_DIFF, achievement.getAchHidden());
 
 		// insert row
 		long id = db.insert(TABLE_ACHIEVEMENTS, null, values);
@@ -169,6 +172,7 @@ public class ChainDbHelper extends SQLiteOpenHelper {
 		values.put(ACH_NAME, achievement.getName());
 		values.put(ACH_DESC, achievement.getAchDesc());
 		values.put(ACH_DIFF, achievement.getAchDiff());
+		values.put(ACH_DIFF, achievement.getAchHidden());
 
 		// update row - table, values, where clause, where args
 		rows = db.update(TABLE_ACHIEVEMENTS, values, ACH_ID + "= ?",
@@ -187,17 +191,20 @@ public class ChainDbHelper extends SQLiteOpenHelper {
 		DbAchievement obj = new DbAchievement();
 
 		if (id > 0) {
-			String selectQuery = "SELECT  * FROM " + TABLE_ACHIEVEMENTS + " WHERE " + ACH_ID + " = " + id;
+			String selectQuery = "SELECT * FROM " + TABLE_ACHIEVEMENTS + " WHERE " + ACH_ID + " = " + id;
 
 			// Log.e(LOG, selectQuery);
 
+			Log.d("Info","Reading achievement from db. " + selectQuery);
+			
 			Cursor c = db.rawQuery(selectQuery, null);
 
 			if (c != null && c.moveToFirst()) {
 				obj = new DbAchievement(c.getInt(c.getColumnIndex(ACH_ID)),
 					c.getString(c.getColumnIndex(ACH_NAME)), 
 					c.getString(c.getColumnIndex(ACH_DESC)), 
-					c.getInt(c.getColumnIndex(ACH_DIFF)));
+					c.getInt(c.getColumnIndex(ACH_DIFF)),
+					c.getInt(c.getColumnIndex(ACH_HIDDEN)));
 			}
 			else {
 				Log.d("Info", "Cursor == null (nothing found).");
@@ -231,6 +238,7 @@ public class ChainDbHelper extends SQLiteOpenHelper {
 				ach.setName(c.getString(c.getColumnIndex(ACH_NAME)));
 				ach.setAchDesc(c.getString(c.getColumnIndex(ACH_DESC)));
 				ach.setAchDiff(c.getInt(c.getColumnIndex(ACH_DIFF)));
+				ach.setAchDiff(c.getInt(c.getColumnIndex(ACH_HIDDEN)));
 
 				// adding to achieved list
 				achs.add(ach);
@@ -301,6 +309,36 @@ public class ChainDbHelper extends SQLiteOpenHelper {
 				new String[] { String.valueOf(player.getId()) });
 	}
 
+	/**
+	 * Get all Players
+	 * 
+	 * @return List of DbPlayer objects
+	 */
+	public List<DbPlayer> getAllPlayers() {
+		List<DbPlayer> objs = new ArrayList<DbPlayer>();
+		String selectQuery = "SELECT  * FROM " + TABLE_PLAYERS;
+
+		// Log.e(LOG, selectQuery);
+
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor c = db.rawQuery(selectQuery, null);
+
+		// looping through all rows and adding to list
+		if (c.moveToFirst()) {
+			do {
+				DbPlayer obj = new DbPlayer();
+				obj.setId(c.getLong(c.getColumnIndex(PLAYER_ID)));
+				obj.setName(c.getString(c.getColumnIndex(PLAYER_NAME)));
+
+				// adding to player list
+				objs.add(obj);
+			} while (c.moveToNext());
+		}
+
+		return objs;
+	}
+	
+	
 	// ***************** Games **********************************
 
 	/**

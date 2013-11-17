@@ -16,6 +16,9 @@
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
-    <color name="bgGrey">#aaaaaa</color>
+    <color name="bg_grey">#dddddd</color>
+    <color name="bg_player">#bce8ff</color>
+    <color name="bg_achievements">#c1ffe0</color>
+    <color name="bg_games">#cdbb7a</color>
 
 </resources>
