@@ -395,6 +395,44 @@ public class ChainDbHelper extends SQLiteOpenHelper {
 		return obj;
 	}
 
+	/**
+	 * Get all games
+	 * 
+	 * @return List of DbGame objects
+	 */
+	public List<DbGame> getAllGames() {
+		List<DbGame> objs = new ArrayList<DbGame>();
+		String selectQuery = "SELECT  * FROM " + TABLE_GAMES;
+
+		// Log.e(LOG, selectQuery);
+
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor c = db.rawQuery(selectQuery, null);
+
+		// looping through all rows and adding to list
+		if (c.moveToFirst()) {
+			do {
+				DbGame game = new DbGame();
+				game.setId(c.getLong(c.getColumnIndex(GAME_ID)));
+
+				game.setStart(c.getString(c.getColumnIndex(GAME_START)));
+				game.setEnd(c.getString(c.getColumnIndex(GAME_END)));
+				game.setDuration(c.getLong(c.getColumnIndex(GAME_DUR)));
+				game.setScore(c.getInt(c.getColumnIndex(GAME_SCORE)));
+				game.setDifficulty(c.getInt(c.getColumnIndex(GAME_DIFF)));
+				game.setLevel(c.getInt(c.getColumnIndex(GAME_LEVEL)));
+				game.setPlayerId(c.getLong(c.getColumnIndex(GAME_PLAYER)));
+
+				
+				// adding to games list
+				objs.add(game);
+			} while (c.moveToNext());
+		}
+
+		return objs;
+	}
+	
+	
 	// *********** Unlocked achievements *********************
 
 	/**

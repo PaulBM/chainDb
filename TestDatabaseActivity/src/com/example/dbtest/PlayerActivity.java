@@ -8,11 +8,15 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class PlayerActivity extends Activity {
+public class PlayerActivity extends Activity implements OnClickListener  {
 
 	ChainDbHelper db;
 	
@@ -24,11 +28,15 @@ public class PlayerActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_player);
 
+		db = new ChainDbHelper(getApplicationContext());
+		
 		/*
 		tv = (TextView) findViewById(R.id.tvPlayersTitle);
 		tv.setText("Players");
 		*/
-		db = new ChainDbHelper(getApplicationContext());
+
+		Button btnAddPlayer = (Button) findViewById(R.id.btAddPlayer);
+        btnAddPlayer.setOnClickListener(this);
 		
 		try {
 			readPlayers((LinearLayout) findViewById(R.id.layoutPlayers));
@@ -45,6 +53,19 @@ public class PlayerActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.player, menu);
 		return true;
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+
+		switch ( v.getId()) {
+			case  R.id.btAddPlayer :
+				Log.i("addPlayer","onlick");
+				addPlayer();
+				break;
+		
+		}
 	}
 
 	
@@ -74,7 +95,7 @@ public class PlayerActivity extends Activity {
 				tv.setLayoutParams(new LayoutParams(
 							LayoutParams.WRAP_CONTENT,
 							LayoutParams.WRAP_CONTENT));
-				Log.d("Info", "Ready to add new Player TextView");
+				Log.i("readPlayers", "Ready to add new Player TextView");
 				layout.addView(tv);
 
 				Log.d("Info", "TextView added " + id);
@@ -82,7 +103,7 @@ public class PlayerActivity extends Activity {
 				// keep a count of list size
 				playersCount++;
 			}
-			Log.d("Info", "Found " + playersCount + " achievements");
+			Log.i("readPlayers", "Found " + playersCount + " players");
 		} else {
 			tv = new TextView(this);
 			tv.setText("No Players in database.");
@@ -90,8 +111,32 @@ public class PlayerActivity extends Activity {
 						LayoutParams.WRAP_CONTENT,
 						LayoutParams.WRAP_CONTENT));
 			layout.addView(tv);
-			Log.d("Info", "Default textview added. (Players 0)");
+			Log.i("readPlayers", "Default textview added. (Players 0)");
 		}
 
 	}
+	
+	public void addPlayer()
+	{
+		long newId=0;
+		String name=null;
+		EditText et = new EditText(this);
+		
+		Log.i("addPlayer","ready to read EditText");
+		
+		et=(EditText) findViewById(R.id.etNewPlayer);
+		//strange syntax to get the string value.
+		name = et.getText().toString();
+		
+		if (name != null) {
+			Log.i("addPlayer","Player name " + name);
+			
+			
+			
+		}
+		
+	}
+
+
+
 }
