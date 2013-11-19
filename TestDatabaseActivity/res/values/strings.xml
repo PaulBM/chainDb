@@ -22,8 +22,8 @@
     <string name="edittext_hint">Name for new or ID to delete</string>
     <string name="new_game_player_hint">Type player name for new game</string>
     <string name="title_activity_new_game">NewGameActivity</string>
-    <string name="game_start">Start Game : Enter time and date.</string>
-    <string name="end_game">End Game : Enter time and date.</string>
+    <string name="game_start">Start : Time and date HH:mm:ss dd-mm-yyyy</string>
+    <string name="end_game">End : Time and date.</string>
     <string name="diff_level">Select Difficulty Level</string>
     <string name="score_level">Choose Score and Level</string>
 

@@ -1,7 +1,11 @@
 package com.example.dbtest;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -66,6 +70,9 @@ public class NewGameActivity extends Activity implements OnClickListener {
 		String playerName = null;
 		long playerId=0;
 		List<DbPlayer> objPlayers = new ArrayList<DbPlayer>();
+		Random rand = new Random();
+		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+		Date duration = new Date();
 		
 		Log.i("addGame","ready to read form data");
 		
@@ -110,18 +117,36 @@ public class NewGameActivity extends Activity implements OnClickListener {
 			error=true;
 		}
 
-		
-		//temp flag error to avoid the db insert
-		error=true;
-		
 		if (!error) {
-			Log.i("addGame","Game data OK");
+			Log.i("addGame", "Verifying data");
+			if (playerId <= 0) {
+				error=true;
+			}
 			
-			
-			newId = db.insertGame(game);
-			
-			Log.i("addGame","new Game id " + newId);
-
+			if (!error) {
+				Log.i("addGame","Game data OK");
+				
+				game.setPlayerId(playerId);
+				
+				game.setStart(startTime + " " + startDate);
+				game.setEnd(startTime + " " + startDate);
+				//choose a random duration... it's only test data
+				try {
+					duration=timeFormat.parse("00:" + rand.nextInt(59) + ":" + rand.nextInt(59));
+					game.setDuration(duration.getTime());
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				game.setDifficulty(diff);
+				game.setLevel(Integer.parseInt(level));
+				game.setScore(Integer.parseInt(score));
+				
+				newId = db.insertGame(game);
+				
+				Log.i("addGame","new Game id " + newId);
+			}
 		}
 		
 	}	
