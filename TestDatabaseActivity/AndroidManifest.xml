@@ -30,6 +30,10 @@
             android:name="com.example.dbtest.PlayerActivity"
             android:label="@string/title_activity_player" >
         </activity>
+        <activity
+            android:name="com.example.dbtest.NewGameActivity"
+            android:label="@string/title_activity_new_game" >
+        </activity>
     </application>
 
 </manifest>

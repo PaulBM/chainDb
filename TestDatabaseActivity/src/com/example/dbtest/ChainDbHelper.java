@@ -314,10 +314,13 @@ public class ChainDbHelper extends SQLiteOpenHelper {
 	 * 
 	 * @return List of DbPlayer objects
 	 */
-	public List<DbPlayer> getAllPlayers() {
+	public List<DbPlayer> getPlayersList(String name) {
 		List<DbPlayer> objs = new ArrayList<DbPlayer>();
 		String selectQuery = "SELECT  * FROM " + TABLE_PLAYERS;
 
+		if (name!= null) {
+			selectQuery+=" where player_name like '%" + name + "%'";
+		}
 		// Log.e(LOG, selectQuery);
 
 		SQLiteDatabase db = this.getReadableDatabase();

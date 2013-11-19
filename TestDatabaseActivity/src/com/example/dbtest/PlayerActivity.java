@@ -35,7 +35,7 @@ public class PlayerActivity extends Activity implements OnClickListener  {
 		tv.setText("Players");
 		*/
 
-		Button btnAddPlayer = (Button) findViewById(R.id.btAddPlayer);
+		Button btnAddPlayer = (Button) findViewById(R.id.btnAddPlayer);
         btnAddPlayer.setOnClickListener(this);
 		
 		try {
@@ -60,7 +60,7 @@ public class PlayerActivity extends Activity implements OnClickListener  {
 		// TODO Auto-generated method stub
 
 		switch ( v.getId()) {
-			case  R.id.btAddPlayer :
+			case  R.id.btnAddPlayer :
 				Log.i("addPlayer","onlick");
 				addPlayer();
 				break;
@@ -81,8 +81,9 @@ public class PlayerActivity extends Activity implements OnClickListener  {
 		int playersCount = 0;
 		TextView tv = new TextView(this);
 		long id = 0;
+		String whereClause=null;
 
-		objPlayers=db.getAllPlayers();
+		objPlayers=db.getPlayersList(whereClause);
 		
 		Log.d("Info", "Read Players... building textview strings.");
 
@@ -116,11 +117,15 @@ public class PlayerActivity extends Activity implements OnClickListener  {
 
 	}
 	
+	/**
+	 * Adds a player to the datase, using the textview text for the player's name
+	 */
 	public void addPlayer()
 	{
 		long newId=0;
 		String name=null;
 		EditText et = new EditText(this);
+		DbPlayer player = new DbPlayer();
 		
 		Log.i("addPlayer","ready to read EditText");
 		
@@ -131,8 +136,12 @@ public class PlayerActivity extends Activity implements OnClickListener  {
 		if (name != null) {
 			Log.i("addPlayer","Player name " + name);
 			
+			player.setName(name);
 			
+			newId = db.insertPlayer(player);
 			
+			Log.i("addPlayer","new Player id " + newId);
+
 		}
 		
 	}

@@ -13,7 +13,7 @@
     tools:context=".PlayerActivity" >
 
     <TextView
-        android:id="@+id/tvPlayersTitle"
+        android:id="@+id/tvPlayersInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/playerButtonText"
@@ -22,7 +22,7 @@
     <LinearLayout
         android:id="@+id/layoutPlayers"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight="0.83"
         android:background="@color/bg_grey"
         android:orientation="vertical" >
@@ -33,15 +33,31 @@
         android:id="@+id/etNewPlayer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10" >
+        android:ems="10"
+        android:hint="@string/edittext_hint" >
 
         <requestFocus />
     </EditText>
 
-    <Button
-        android:id="@+id/btAddPlayer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/add_button" />
+    <LinearLayout
+        style="android:buttonBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/btnAddPlayer"
+            style="android:buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_button" />
+
+        <Button
+            android:id="@+id/btnDeletePlayer"
+            style="android:buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/delete_button" />
+
+    </LinearLayout>
 
 </LinearLayout>

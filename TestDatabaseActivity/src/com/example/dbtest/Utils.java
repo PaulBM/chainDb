@@ -19,7 +19,8 @@ public class Utils {
 	 * @return List<string>
 	 */
 
-	public static List<String> readLinesFromFile(InputStream stream) {
+	public static List<String> readLinesFromFile(InputStream stream)
+	{
 		List<String> lines = new ArrayList<String>();
 		String line;
 
@@ -40,4 +41,5 @@ public class Utils {
 		}
 		return lines;
 	}
+
 }
