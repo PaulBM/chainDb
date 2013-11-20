@@ -27,5 +27,8 @@
     <string name="diff_level">Select Difficulty Level</string>
     <string name="score_level">Choose Score and Level</string>
     <string name="title_activity_unlock">UnlockActivity</string>
+    <string name="unlocked_title">Unlocked Achievements</string>
+    <string name="unlock_random_button">Unlock Random</string>
+    <string name="game_id">"for Game ID : "</string>
 
 </resources>

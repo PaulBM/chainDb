@@ -113,10 +113,13 @@ public class GameActivity extends Activity {
 		} else {
 			tv = new TextView(this);
 			tv.setText("No Games in database.");
-			tv.setLayoutParams(new LayoutParams(
-						LayoutParams.WRAP_CONTENT,
-						LayoutParams.WRAP_CONTENT));
+//			LayoutParams lparams=new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+			
+			tv.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT));
 			layout.addView(tv);
+			
+//			Utils.addTextView(layout, "No Games in database.", lparams);
+			
 			Log.d("Info", "Default textview added. (Games 0)");
 		}
 
