@@ -275,7 +275,8 @@ public class ChainDbHelper extends SQLiteOpenHelper {
 	 */
 	public DbPlayer getPlayer(long id) {
 		SQLiteDatabase db = this.getReadableDatabase();
-
+		DbPlayer obj = new DbPlayer();
+		
 		String selectQuery = "SELECT  * FROM " + TABLE_PLAYERS + " WHERE "
 				+ PLAYER_ID + " = " + id;
 
@@ -283,11 +284,11 @@ public class ChainDbHelper extends SQLiteOpenHelper {
 
 		Cursor c = db.rawQuery(selectQuery, null);
 
-		if (c != null)
-			c.moveToFirst();
+		if (c != null && c.moveToFirst()) {
 
-		DbPlayer obj = new DbPlayer(c.getInt(c.getColumnIndex(PLAYER_ID)),
+			obj = new DbPlayer(c.getInt(c.getColumnIndex(PLAYER_ID)),
 				c.getString(c.getColumnIndex(PLAYER_NAME)));
+		}
 
 		return obj;
 	}
@@ -327,7 +328,7 @@ public class ChainDbHelper extends SQLiteOpenHelper {
 		Cursor c = db.rawQuery(selectQuery, null);
 
 		// looping through all rows and adding to list
-		if (c.moveToFirst()) {
+		if (c != null && c.moveToFirst()) {
 			do {
 				DbPlayer obj = new DbPlayer();
 				obj.setId(c.getLong(c.getColumnIndex(PLAYER_ID)));
@@ -375,6 +376,7 @@ public class ChainDbHelper extends SQLiteOpenHelper {
 	 */
 	public DbGame getGame(long id) {
 		SQLiteDatabase db = this.getReadableDatabase();
+		DbGame obj = new DbGame();
 
 		String selectQuery = "SELECT  * FROM " + TABLE_GAMES + " WHERE "
 				+ GAME_ID + " = " + id;
@@ -383,10 +385,9 @@ public class ChainDbHelper extends SQLiteOpenHelper {
 
 		Cursor c = db.rawQuery(selectQuery, null);
 
-		if (c != null)
-			c.moveToFirst();
+		if (c != null && c.moveToFirst()) {
 
-		DbGame obj = new DbGame(c.getInt(c.getColumnIndex(GAME_ID)),
+			obj = new DbGame(c.getInt(c.getColumnIndex(GAME_ID)),
 				c.getString(c.getColumnIndex(GAME_START)), c.getString(c
 						.getColumnIndex(GAME_END)), c.getLong(c
 						.getColumnIndex(GAME_DUR)), c.getInt(c
@@ -394,6 +395,10 @@ public class ChainDbHelper extends SQLiteOpenHelper {
 						.getColumnIndex(GAME_DIFF)), c.getInt(c
 						.getColumnIndex(GAME_LEVEL)), c.getLong(c
 						.getColumnIndex(GAME_PLAYER)));
+		}
+		else {
+			Log.d("getGame", "unable to find game id " + id);
+		}
 
 		return obj;
 	}
@@ -413,7 +418,7 @@ public class ChainDbHelper extends SQLiteOpenHelper {
 		Cursor c = db.rawQuery(selectQuery, null);
 
 		// looping through all rows and adding to list
-		if (c.moveToFirst()) {
+		if (c != null && c.moveToFirst()) {
 			do {
 				DbGame game = new DbGame();
 				game.setId(c.getLong(c.getColumnIndex(GAME_ID)));
@@ -475,7 +480,7 @@ public class ChainDbHelper extends SQLiteOpenHelper {
 		Cursor c = db.rawQuery(selectQuery, null);
 
 		// looping through all rows and adding to list
-		if (c.moveToFirst()) {
+		if (c != null && c.moveToFirst()) {
 			do {
 				DbUnlocked unlock = new DbUnlocked();
 				unlock.setPlayerId(id);

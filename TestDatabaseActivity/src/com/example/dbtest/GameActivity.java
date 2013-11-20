@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -79,10 +80,31 @@ public class GameActivity extends Activity {
 				tv.setLayoutParams(new LayoutParams(
 							LayoutParams.WRAP_CONTENT,
 							LayoutParams.WRAP_CONTENT));
+				
+				tv.setOnClickListener(new OnClickListener() {
+				    @Override           
+				    public void onClick(View v) {
+						// Bundle is used to pass parameters to a new Activity... in this case to the Unlock Activity. 
+						// the game Id is required
+						Bundle b = new Bundle();
+				        b.putLong("gameId", v.getId());
+
+				        Intent intent = new Intent(GameActivity.this, UnlockActivity.class);
+				        //put extra params on the Intent, to pass the gameId
+				        
+				        Log.i("readGames","Game id for onClick " + v.getId());
+				        intent.putExtras(b);
+//				        intent.putExtra("gameId", v.getId());
+				        startActivity(intent);
+				    }
+				});
+				
 				Log.d("Info", "Ready to add new Game TextView");
 				layout.addView(tv);
 
 				Log.d("Info", "TextView added " + id);
+
+
 
 				// keep a count of list size
 				gamesCount++;

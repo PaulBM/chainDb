@@ -26,5 +26,6 @@
     <string name="end_game">End : Time and date.</string>
     <string name="diff_level">Select Difficulty Level</string>
     <string name="score_level">Choose Score and Level</string>
+    <string name="title_activity_unlock">UnlockActivity</string>
 
 </resources>
