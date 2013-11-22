@@ -4,6 +4,7 @@
 package com.example.dbtest;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import android.content.ContentValues;
@@ -63,9 +64,8 @@ public class ChainDbHelper extends SQLiteOpenHelper {
 	// Achievements table create statement
 	private static final String CREATE_TABLE_ACHIEVEMENTS = "CREATE TABLE "
 			+ TABLE_ACHIEVEMENTS + "(" + ACH_ID + " INTEGER PRIMARY KEY,"
-			+ ACH_NAME + " TEXT," + ACH_DESC + " TEXT," + ACH_DIFF + " INTEGER,"
-			+ ACH_HIDDEN + " INTEGER"
-			+ ")";
+			+ ACH_NAME + " TEXT," + ACH_DESC + " TEXT," + ACH_DIFF
+			+ " INTEGER," + ACH_HIDDEN + " INTEGER" + ")";
 
 	// Games table create statement
 	private static final String CREATE_TABLE_GAMES = "CREATE TABLE "
@@ -81,10 +81,13 @@ public class ChainDbHelper extends SQLiteOpenHelper {
 
 	// Achieved table create statement
 	private static final String CREATE_TABLE_UNLOCKED = "CREATE TABLE "
-			+ TABLE_UNLOCKED + "(" + UNLOCKED_ACHIEVEMENT
-			+ " INTEGER NOT NULL," + UNLOCKED_PLAYER + " INTEGER NOT NULL,"
-			+ UNLOCKED_GAME + " INTEGER NOT NULL," + UNLOCKED_GOOGLED
-			+ " INTEGER DEFAULT 0" + ")";
+			+ TABLE_UNLOCKED + "(" + 
+			UNLOCKED_ACHIEVEMENT + " INTEGER NOT NULL," +
+			UNLOCKED_PLAYER + " INTEGER NOT NULL," +
+			UNLOCKED_GAME + " INTEGER NOT NULL," +
+			UNLOCKED_GOOGLED + " INTEGER DEFAULT 0" +
+			UNLOCKED_DATETIME + " timestamp default CURRENT_TIMESTAMP" +
+			")";
 
 	public ChainDbHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -111,6 +114,23 @@ public class ChainDbHelper extends SQLiteOpenHelper {
 
 		// create new tables
 		onCreate(db);
+	}
+
+	// ******* General methods ****************/
+
+	public int countTableRows(String table) {
+		SQLiteDatabase db = this.getReadableDatabase();
+		int rows = 0;
+
+		if (table != null && db != null && db.isOpen()) {
+			Cursor c = db.rawQuery("select count(*) from ?",
+					new String[] { table });
+			if (c != null && c.moveToFirst()) {
+				rows = c.getInt(0);
+			}
+			c.close();
+		}
+		return rows;
 	}
 
 	// ****************** Achievements ************************************
@@ -191,26 +211,25 @@ public class ChainDbHelper extends SQLiteOpenHelper {
 		DbAchievement obj = new DbAchievement();
 
 		if (id > 0) {
-			String selectQuery = "SELECT * FROM " + TABLE_ACHIEVEMENTS + " WHERE " + ACH_ID + " = " + id;
+			String selectQuery = "SELECT * FROM " + TABLE_ACHIEVEMENTS
+					+ " WHERE " + ACH_ID + " = " + id;
 
 			// Log.e(LOG, selectQuery);
 
-			Log.d("Info","Reading achievement from db. " + selectQuery);
-			
+			Log.d("Info", "Reading achievement from db. " + selectQuery);
+
 			Cursor c = db.rawQuery(selectQuery, null);
 
 			if (c != null && c.moveToFirst()) {
 				obj = new DbAchievement(c.getInt(c.getColumnIndex(ACH_ID)),
-					c.getString(c.getColumnIndex(ACH_NAME)), 
-					c.getString(c.getColumnIndex(ACH_DESC)), 
-					c.getInt(c.getColumnIndex(ACH_DIFF)),
-					c.getInt(c.getColumnIndex(ACH_HIDDEN)));
-			}
-			else {
+						c.getString(c.getColumnIndex(ACH_NAME)), c.getString(c
+								.getColumnIndex(ACH_DESC)), c.getInt(c
+								.getColumnIndex(ACH_DIFF)), c.getInt(c
+								.getColumnIndex(ACH_HIDDEN)));
+			} else {
 				Log.d("Info", "Cursor == null (nothing found).");
 			}
-		}
-		else {
+		} else {
 			Log.d("Error!", "Id of 0 passed to getAchievement()");
 		}
 		return obj;
@@ -276,7 +295,7 @@ public class ChainDbHelper extends SQLiteOpenHelper {
 	public DbPlayer getPlayer(long id) {
 		SQLiteDatabase db = this.getReadableDatabase();
 		DbPlayer obj = new DbPlayer();
-		
+
 		String selectQuery = "SELECT  * FROM " + TABLE_PLAYERS + " WHERE "
 				+ PLAYER_ID + " = " + id;
 
@@ -287,7 +306,7 @@ public class ChainDbHelper extends SQLiteOpenHelper {
 		if (c != null && c.moveToFirst()) {
 
 			obj = new DbPlayer(c.getInt(c.getColumnIndex(PLAYER_ID)),
-				c.getString(c.getColumnIndex(PLAYER_NAME)));
+					c.getString(c.getColumnIndex(PLAYER_NAME)));
 		}
 
 		return obj;
@@ -319,8 +338,8 @@ public class ChainDbHelper extends SQLiteOpenHelper {
 		List<DbPlayer> objs = new ArrayList<DbPlayer>();
 		String selectQuery = "SELECT  * FROM " + TABLE_PLAYERS;
 
-		if (name!= null) {
-			selectQuery+=" where player_name like '%" + name + "%'";
+		if (name != null) {
+			selectQuery += " where player_name like '%" + name + "%'";
 		}
 		// Log.e(LOG, selectQuery);
 
@@ -341,8 +360,7 @@ public class ChainDbHelper extends SQLiteOpenHelper {
 
 		return objs;
 	}
-	
-	
+
 	// ***************** Games **********************************
 
 	/**
@@ -387,16 +405,15 @@ public class ChainDbHelper extends SQLiteOpenHelper {
 
 		if (c != null && c.moveToFirst()) {
 
-			obj = new DbGame(c.getInt(c.getColumnIndex(GAME_ID)),
-				c.getString(c.getColumnIndex(GAME_START)), c.getString(c
-						.getColumnIndex(GAME_END)), c.getLong(c
-						.getColumnIndex(GAME_DUR)), c.getInt(c
-						.getColumnIndex(GAME_SCORE)), c.getInt(c
-						.getColumnIndex(GAME_DIFF)), c.getInt(c
-						.getColumnIndex(GAME_LEVEL)), c.getLong(c
-						.getColumnIndex(GAME_PLAYER)));
-		}
-		else {
+			obj = new DbGame(c.getInt(c.getColumnIndex(GAME_ID)), c.getString(c
+					.getColumnIndex(GAME_START)), c.getString(c
+					.getColumnIndex(GAME_END)), c.getLong(c
+					.getColumnIndex(GAME_DUR)), c.getInt(c
+					.getColumnIndex(GAME_SCORE)), c.getInt(c
+					.getColumnIndex(GAME_DIFF)), c.getInt(c
+					.getColumnIndex(GAME_LEVEL)), c.getLong(c
+					.getColumnIndex(GAME_PLAYER)));
+		} else {
 			Log.d("getGame", "unable to find game id " + id);
 		}
 
@@ -431,7 +448,6 @@ public class ChainDbHelper extends SQLiteOpenHelper {
 				game.setLevel(c.getInt(c.getColumnIndex(GAME_LEVEL)));
 				game.setPlayerId(c.getLong(c.getColumnIndex(GAME_PLAYER)));
 
-				
 				// adding to games list
 				objs.add(game);
 			} while (c.moveToNext());
@@ -439,8 +455,7 @@ public class ChainDbHelper extends SQLiteOpenHelper {
 
 		return objs;
 	}
-	
-	
+
 	// *********** Unlocked achievements *********************
 
 	/**
@@ -497,5 +512,48 @@ public class ChainDbHelper extends SQLiteOpenHelper {
 		}
 
 		return unlockeds;
+	}
+	
+	/**
+	 * Check to see if an achievement is unlocked for a player
+	 * @param achId
+	 * @param playerId
+	 * @return boolean 
+	 */
+	public boolean isAchUnlocked(long achId, long playerId)
+	{
+		boolean unlocked=false;
+		String sql = null;
+		
+		sql = "select count(*) from unlocked where " + ACH_ID + "= ? and " + PLAYER_ID + "= ?" ;
+		SQLiteDatabase db = this.getReadableDatabase();
+		
+		Cursor c = db.rawQuery(sql, new String[] {String.valueOf(achId), String.valueOf(playerId)} );		
+		if (c != null && c.moveToFirst()) {
+
+			
+		}
+		return unlocked;
+	}
+
+	/**
+	 * Count unlocked achievements for given field and Id
+	 * @param field
+	 * @param Id
+	 * @return
+	 */
+	public int countUnlocked(String field, long Id)
+	{
+		int unlocked = 0;
+		String sql = null;
+		
+		sql = "select count(*) from unlocked where ? = ?";
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor c = db.rawQuery(sql, new String[] {field, String.valueOf(Id) } );
+
+		if (c != null && c.moveToFirst()) {
+			unlocked = c.getInt(0);
+		}
+		return unlocked;
 	}
 }
