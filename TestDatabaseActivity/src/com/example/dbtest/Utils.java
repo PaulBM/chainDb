@@ -10,7 +10,6 @@ import java.util.List;
 import android.content.Context;
 import android.util.Log;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class Utils {
