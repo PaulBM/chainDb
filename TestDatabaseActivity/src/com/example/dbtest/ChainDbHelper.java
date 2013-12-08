@@ -26,6 +26,7 @@ public class ChainDbHelper extends SQLiteOpenHelper {
 	// Database Name
 	private static final String DATABASE_NAME = "chain.db";
 
+	private static final String ANON = "Anonymous";
 	// Table Names
 	private static final String TABLE_ACHIEVEMENTS = "achievements";
 	private static final String TABLE_GAMES = "games";
@@ -47,6 +48,8 @@ public class ChainDbHelper extends SQLiteOpenHelper {
 	private static final String GAME_SCORE = "game_score";
 	private static final String GAME_DIFF = "game_difficulty";
 	private static final String GAME_LEVEL = "game_level";
+	private static final String GAME_TYPE = "game_type";
+	private static final String GAME_BLOCKS = "game_blocks";
 	private static final String GAME_PLAYER = "game_player_id";
 
 	// Players Table - column names
@@ -81,6 +84,8 @@ public class ChainDbHelper extends SQLiteOpenHelper {
 			GAME_SCORE + " LONGINT," + 
 			GAME_DIFF + " INTEGER,"	+ 
 			GAME_LEVEL + " INTEGER," + 
+			GAME_TYPE + " INTEGER," +
+			GAME_BLOCKS + " INTEGER," +
 			GAME_PLAYER + " INTEGER" + 
 			")";
 
@@ -124,17 +129,30 @@ public class ChainDbHelper extends SQLiteOpenHelper {
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		// on upgrade drop older tables
 //		db.execSQL("DROP TABLE IF EXISTS " + TABLE_ACHIEVEMENTS);
-//		db.execSQL("DROP TABLE IF EXISTS " + TABLE_GAMES);
+		db.execSQL("DROP TABLE IF EXISTS " + TABLE_GAMES);
 //		db.execSQL("DROP TABLE IF EXISTS " + TABLE_PLAYERS);
 		
 		
-		db.execSQL("DROP TABLE IF EXISTS " + TABLE_UNLOCKED);
+//		db.execSQL("DROP TABLE IF EXISTS " + TABLE_UNLOCKED);
 
 		Log.i("onUpgrade", "Dropped the table(s).");
 		// create new tables
 		onCreate(db);
 	}
 
+	@Override
+	public void onOpen(SQLiteDatabase db)
+	{
+		List<DbPlayer> players = new ArrayList<DbPlayer>();		
+		if (!db.isReadOnly()) {
+			players = getPlayersList(ANON); 
+			if (players.size()==0) {
+				// no anonymous player found.
+				
+			}
+		}
+	}
+	
 	// ******* General methods ****************/
 
 	public long countTableRows(String table)
@@ -373,7 +391,7 @@ public class ChainDbHelper extends SQLiteOpenHelper {
 	}
 
 	/**
-	 * Get all Players
+	 * Get all Players or players with name like the string passed
 	 * 
 	 * @return List of DbPlayer objects
 	 */
@@ -422,6 +440,8 @@ public class ChainDbHelper extends SQLiteOpenHelper {
 		values.put(GAME_SCORE, game.getScore());
 		values.put(GAME_DIFF, game.getDifficulty());
 		values.put(GAME_LEVEL, game.getLevel());
+		values.put(GAME_TYPE, game.getType());
+		values.put(GAME_BLOCKS, game.getBlocks());
 		values.put(GAME_PLAYER, game.getPlayerId());
 
 		// insert row
@@ -448,14 +468,16 @@ public class ChainDbHelper extends SQLiteOpenHelper {
 
 		if (c != null && c.moveToFirst()) {
 
-			obj = new DbGame(c.getInt(c.getColumnIndex(GAME_ID)), c.getString(c
-					.getColumnIndex(GAME_START)), c.getString(c
-					.getColumnIndex(GAME_END)), c.getLong(c
-					.getColumnIndex(GAME_DUR)), c.getInt(c
-					.getColumnIndex(GAME_SCORE)), c.getInt(c
-					.getColumnIndex(GAME_DIFF)), c.getInt(c
-					.getColumnIndex(GAME_LEVEL)), c.getLong(c
-					.getColumnIndex(GAME_PLAYER)));
+			obj = new DbGame(c.getInt(c.getColumnIndex(GAME_ID)), 
+					c.getString(c.getColumnIndex(GAME_START)),
+					c.getString(c.getColumnIndex(GAME_END)),
+					c.getLong(c.getColumnIndex(GAME_DUR)), 
+					c.getInt(c.getColumnIndex(GAME_SCORE)), 
+					c.getInt(c.getColumnIndex(GAME_DIFF)), 
+					c.getInt(c.getColumnIndex(GAME_LEVEL)),
+					c.getInt(c.getColumnIndex(GAME_TYPE)),
+					c.getInt(c.getColumnIndex(GAME_BLOCKS)),
+					c.getLong(c.getColumnIndex(GAME_PLAYER)));
 		} else {
 			Log.d("getGame", "unable to find game id " + id);
 		}
@@ -489,6 +511,8 @@ public class ChainDbHelper extends SQLiteOpenHelper {
 				game.setScore(c.getInt(c.getColumnIndex(GAME_SCORE)));
 				game.setDifficulty(c.getInt(c.getColumnIndex(GAME_DIFF)));
 				game.setLevel(c.getInt(c.getColumnIndex(GAME_LEVEL)));
+				game.setType(c.getInt(c.getColumnIndex(GAME_TYPE)));
+				game.setBlocks(c.getInt(c.getColumnIndex(GAME_BLOCKS)));
 				game.setPlayerId(c.getLong(c.getColumnIndex(GAME_PLAYER)));
 
 				// adding to games list
@@ -499,6 +523,8 @@ public class ChainDbHelper extends SQLiteOpenHelper {
 		return objs;
 	}
 
+	
+	
 	// *********** Unlocked achievements *********************
 
 	/**
